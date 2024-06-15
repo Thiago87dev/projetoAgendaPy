@@ -18,7 +18,7 @@ def create(req):
             contact = form.save()
             # contact.show = False
             # contact.save()
-            return redirect('contact:update', contact_id=contact.pk)
+            return redirect('contact:contact', contact_id=contact.pk)
     
         return render(
             req,
@@ -53,7 +53,7 @@ def update(req, contact_id):
             contact = form.save()
             # contact.show = False
             # contact.save()
-            return redirect('contact:update', contact_id=contact.pk)
+            return redirect('contact:contact', contact_id=contact.pk)
     
         return render(
             req,
