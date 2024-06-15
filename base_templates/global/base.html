@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,5 +11,7 @@
         {% block content %}{% endblock content %}
         {% include "global/partials/_pagination.html" %}
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.1/dist/sweetalert2.all.min.js"></script>
+    <script src="{% static "global/js/script.js" %}"></script>
 </body>
 </html>

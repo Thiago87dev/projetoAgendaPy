@@ -11,5 +11,14 @@
         <p><b>Created Date:</b> {{contact.created_date}}</p>
         <p><b>Description:</b> {{contact.description}}</p>
         <p><b>Category:</b> {{contact.category.name}}</p>
+
+        <div class="contact-links">
+            <a class="btn2 btn-link" href="{% url "contact:update" contact.id %}">Update</a>
+
+            <form data-js="form-delete" action="{% url "contact:delete" contact.id %}" method="POST">
+                {% csrf_token %}
+                    <button data-js="btn-delete" class="btn2 btn-link btn-delete" type="button">Delete</button>
+            </form>
+        </div>
     </div>
 {% endblock content %}
