@@ -2,11 +2,12 @@ from django.shortcuts import redirect, render, get_object_or_404
 from contact.forms import ContactForm
 from django.urls import reverse
 from contact.models import Contact
+from django.http import JsonResponse
 
 def create(req):
     form_action = reverse('contact:create')
     if req.method == 'POST':
-        form = ContactForm(req.POST)
+        form = ContactForm(req.POST, req.FILES)
         
         context = {
         'form': form,
@@ -16,9 +17,14 @@ def create(req):
         if form.is_valid():
             # form.save()
             contact = form.save()
+            if req.headers.get('x-requested-with') == 'XMLHttpRequest':
+               return JsonResponse({'status': 'success', 'contact_id': contact.pk}) 
             # contact.show = False
             # contact.save()
             return redirect('contact:contact', contact_id=contact.pk)
+        
+        if req.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'error', 'errors': form.errors})
     
         return render(
             req,
@@ -41,7 +47,7 @@ def update(req, contact_id):
     contact = get_object_or_404(Contact, pk=contact_id, show=True)
     form_action = reverse('contact:update', args=(contact_id,))
     if req.method == 'POST':
-        form = ContactForm(req.POST, instance=contact)
+        form = ContactForm(req.POST, req.FILES, instance=contact)
         
         context = {
         'form': form,
@@ -51,9 +57,14 @@ def update(req, contact_id):
         if form.is_valid():
             # form.save()
             contact = form.save()
+            if req.headers.get('x-requested-with') == 'XMLHttpRequest':
+               return JsonResponse({'status': 'success', 'contact_id': contact.pk}) 
             # contact.show = False
             # contact.save()
             return redirect('contact:contact', contact_id=contact.pk)
+        
+        if req.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'error', 'errors': form.errors})
     
         return render(
             req,

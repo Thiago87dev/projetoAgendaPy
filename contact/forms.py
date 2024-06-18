@@ -1,6 +1,8 @@
 from django import forms
 from contact.models import Contact
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 class ContactForm(forms.ModelForm):
     class Meta:
@@ -8,6 +10,7 @@ class ContactForm(forms.ModelForm):
         fields = (
             'first_name', 'last_name', 'phone',
             'email', 'description', 'category',
+            'picture',
         )
         # config os campos e widgets 1 (utilizado para criar)
         # widgets = {
@@ -30,6 +33,14 @@ class ContactForm(forms.ModelForm):
         label='first name here',
         help_text='Help text for the user'  
     )
+    picture = forms.ImageField(
+        widget=forms.FileInput(
+            attrs={
+                'accept': 'image/*'
+            }
+        ),
+        required=False
+    )
     
     # config os campos e widgets 3 (utilizado para alterar/atualizar)
     def __init__(self, *args, **kwargs):
@@ -41,10 +52,10 @@ class ContactForm(forms.ModelForm):
         # })
         
         # deixando os inputs com a borda vermelha em caso de erro
-        for field in self.fields:
-            if self.errors.get(field):
-                current_classes = self.fields[field].widget.attrs.get('class', '')
-                self.fields[field].widget.attrs['class'] = f'{current_classes} input-error'
+        # for field in self.fields:
+        #     if self.errors.get(field):
+        #         current_classes = self.fields[field].widget.attrs.get('class', '')
+        #         self.fields[field].widget.attrs['class'] = f'{current_classes} input-error'
     
     # validando campos    
     # Quando for validar mais de um campo juntos (quando um campo depende do outro) (ex: senhas iguais)
@@ -76,3 +87,34 @@ class ContactForm(forms.ModelForm):
                 )
             )
         return first_name
+    
+class RegisterForm(UserCreationForm):
+    first_name = forms.CharField(
+        required=True,
+        min_length=3,
+    )
+    last_name = forms.CharField(
+        required=True,
+        min_length=3,
+    )
+    email = forms.EmailField(
+        required=True,
+        min_length=3,
+    )
+    
+    class Meta:
+        model = User
+        fields = (
+            'first_name', 'last_name', 'email', 'username', 'password1', 'password2'
+        )
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        
+        if User.objects.filter(email=email).exists():
+            self.add_error(
+                'email',
+                ValidationError('A user with that email already exists.', code='invalid')
+            )
+        
+        return email

@@ -4,8 +4,8 @@
 
 
     <div class="form-wrapper">
-        <h2>Contact</h2>
-        <form data-js="form-create-update" action="{{form_action}}" method="POST" enctype="multipart/form-data">
+        <h2>Register</h2>
+        <form data-js="form-create-update" action="{{form_action}}" method="POST">
             {% csrf_token %}
             <div class="form-content">
                 {% for field in form %}
@@ -17,17 +17,12 @@
                         {% endif %}
                         {{field.errors}}
                     </div>
-                    {% if field.name == 'picture' and field.value.url %}
-                        <div class="form-group">
-                            <img src="{{field.value.url}}" alt="picture {{field.value}}">
-                        </div>
-                    {% endif %}
                 {% endfor %}
             </div>
 
             <div class="form-content">
                 <div class="form-group">
-                        <button data-js="btn-create-update" type="button" class="btn2">Send</button>
+                    <button type="submit" class="btn2">Send</button>
                 </div>
             </div>
         </form>
