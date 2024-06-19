@@ -5,26 +5,16 @@
 
     <div class="form-wrapper">
         <h2>Register</h2>
-        <form data-js="form-create-update" action="{{form_action}}" method="POST">
-            {% csrf_token %}
-            <div class="form-content">
-                {% for field in form %}
-                    <div class="form-group">
-                        <label for="{{field.id_for_label}}">{{field.label}}</label>
-                        {{field}}
-                        {% if field.help_text %}
-                            <p class="help-text">{{field.help_text}}</p>
-                        {% endif %}
-                        {{field.errors}}
-                    </div>
-                {% endfor %}
-            </div>
-
-            <div class="form-content">
-                <div class="form-group">
-                    <button type="submit" class="btn2">Send</button>
-                </div>
-            </div>
-        </form>
+        {% include "contact/partials/_user-form.html" %}
     </div>
+
+    {% comment %} script para o foco ficar no first name {% endcomment %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const firstNameInput = document.querySelector('input[name="first_name"]');
+          if (firstNameInput) {
+            firstNameInput.focus();
+          }
+        });
+    </script>
 {% endblock content %}

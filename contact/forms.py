@@ -118,3 +118,4 @@ class RegisterForm(UserCreationForm):
             )
         
         return email
+    
