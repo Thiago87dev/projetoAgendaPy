@@ -3,7 +3,9 @@ from contact.forms import ContactForm
 from django.urls import reverse
 from contact.models import Contact
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
+@login_required(login_url='contact:login')
 def create(req):
     form_action = reverse('contact:create')
     if req.method == 'POST':
@@ -16,7 +18,9 @@ def create(req):
         
         if form.is_valid():
             # form.save()
-            contact = form.save()
+            contact = form.save(commit=False)
+            contact.owner = req.user
+            contact.save()
             if req.headers.get('x-requested-with') == 'XMLHttpRequest':
                return JsonResponse({'status': 'success', 'contact_id': contact.pk}) 
             # contact.show = False
@@ -42,9 +46,9 @@ def create(req):
         'contact/create.html',
         context
     )
-    
+@login_required(login_url='contact:login')  
 def update(req, contact_id):
-    contact = get_object_or_404(Contact, pk=contact_id, show=True)
+    contact = get_object_or_404(Contact, pk=contact_id, show=True, owner=req.user)
     form_action = reverse('contact:update', args=(contact_id,))
     if req.method == 'POST':
         form = ContactForm(req.POST, req.FILES, instance=contact)
@@ -82,9 +86,9 @@ def update(req, contact_id):
         'contact/create.html',
         context
     )
-    
+@login_required(login_url='contact:login')   
 def delete(req, contact_id):
-    contact = get_object_or_404(Contact, pk=contact_id, show=True)
+    contact = get_object_or_404(Contact, pk=contact_id, show=True, owner=req.user)
     # confirmation = req.POST.get('confirmation', 'no')
     
     # context = {

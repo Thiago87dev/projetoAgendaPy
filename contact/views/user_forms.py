@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
-from contact.forms import RegisterForm
+from contact.forms import RegisterForm, UserUpdateForm
 from django.contrib import messages, auth
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 
 def register(req):
     form = RegisterForm()
@@ -16,6 +17,7 @@ def register(req):
             
     context = {
             'form': form,
+            'btn_text': 'Create',
     }
         
     return render(
@@ -23,7 +25,7 @@ def register(req):
         'contact/register.html',
         context
     )
-    
+
 def login_view(req):
     form = AuthenticationForm(req)
     
@@ -40,9 +42,40 @@ def login_view(req):
     return render(
         req,
         'contact/login.html',
-        {'form': form},
+        {'form': form,
+         'btn_text': 'Login'
+        },
+        
     )
-    
+
+@login_required(login_url='contact:login')
 def logout_view(req):
     auth.logout(req)
-    return redirect('contact:login')
+    return redirect('contact:index')
+
+@login_required(login_url='contact:login')
+def user_update(req):
+    form = UserUpdateForm(instance=req.user)
+    
+    if req.method != 'POST':
+        return render(
+            req,
+            'contact/user-update.html',
+            {'form': form,
+             'btn_text': 'Update'
+            }
+        )
+    
+    form = UserUpdateForm(data=req.POST, instance=req.user)
+    
+    if not form.is_valid():
+        return render(
+            req,
+            'contact/user-update.html',
+            {'form': form,
+             'btn_text': 'Update'
+            }
+        )
+    
+    form.save()
+    return redirect('contact:user_update')

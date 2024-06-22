@@ -5,9 +5,12 @@ from django.db.models import Q
 from django.http import Http404
 
 # Create your views here.
-def index(req):
-    contacts = Contact.objects.filter(show=True).order_by('first_name', 'last_name')
-    
+def index(req, mine=False):
+    if mine:
+        contacts = Contact.objects.filter(show=True, owner=req.user).order_by('first_name', 'last_name')
+    else:
+        contacts = Contact.objects.filter(show=True).order_by('first_name', 'last_name')
+        
     paginator = Paginator(contacts, 20) 
 
     page_number = req.GET.get("page")
