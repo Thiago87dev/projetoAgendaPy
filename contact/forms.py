@@ -34,6 +34,7 @@ class ContactForm(forms.ModelForm):
         label='first name here',
         help_text='Help text for the user'  
     )
+    
     picture = forms.ImageField(
         widget=forms.FileInput(
             attrs={

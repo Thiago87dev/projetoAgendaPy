@@ -20,6 +20,12 @@
                 <li class="menu-item">
                     <a href="{% url "contact:logout" %}" class="menu-link">Logout</a>
                 </li>
+                <li class="menu-item">
+                    <a href="{% url "contact:startwa" %}" class="menu-link">Starts with A</a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url "contact:withemail" %}" class="menu-link">Without email</a>
+                </li>
             {% else %}
                 <li class="menu-item">
                     <a href="{% url "contact:register" %}" class="menu-link">Create account</a>

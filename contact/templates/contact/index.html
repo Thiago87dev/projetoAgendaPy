@@ -4,6 +4,14 @@
     {% if page_obj %}
         <div class="responsive-table">
             <table class="contacts-table">
+                {% if show_contact %}
+                    {% if contacts_count == 1 %}
+                        <h2 class="search-contact">{{contacts_count}} contacts were found</h2>
+                    {% elif contacts_count > 1 %}
+                        <h2 class="search-contact">{{contacts_count}} contact was found</h2>
+                    {% endif %}
+                {% endif %}
+
                 {% if search_value %}
                     {% if contacts_count == 1 %}
                         <h2 class="search-contact">{{contacts_count}} contacts were found for the search "{{search_value}}"</h2>
