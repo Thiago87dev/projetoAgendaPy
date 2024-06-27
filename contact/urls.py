@@ -6,9 +6,9 @@ app_name = 'contact'
 urlpatterns = [
     path('search/', views.search, name='search'),
     path('', views.index, name='index'),
-    path('/mine/', views.index, {'mine': True}, name='mine'),
-    path('/startwa/', views.startwa, name='startwa'),
-    path('/withemail/', views.withemail, name='withemail'),
+    path('mine/', views.index, {'mine': True}, name='mine'),
+    path('startwa/', views.startwa, name='startwa'),
+    path('withemail/', views.withemail, name='withemail'),
     
     # contact (CRUD)
     path('contact/<int:contact_id>/', views.contact, name='contact'),

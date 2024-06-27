@@ -98,6 +98,6 @@ def delete(req, contact_id):
     
     # if confirmation == 'yes':
     contact.delete()
-    return redirect('contact:index')
+    return redirect('contact:mine')
     
 

@@ -354,3 +354,17 @@ svg {
 .btn-delete {
   background-color: tomato;
 }
+
+.profile-content{
+  margin-right: 120px;
+  display: flex;
+  justify-content: end;
+  gap: 20px;
+}
+
+.profile {
+  text-align: end;
+  color: var(--link-light-color);
+  text-decoration: none;
+  transition: filter var(--transition-fast) ease-in-out;
+}
